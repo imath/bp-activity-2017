@@ -1,0 +1,43 @@
+/* Activity rich editor styles */
+
+#buddypress form#whats-new-form #what-is-new-submit {
+	float: right;
+	margin-top: 12px;
+}
+
+#buddypress #what-is-new-options:after {
+	clear: both;
+	content: "";
+	display: table;
+}
+
+/* Use the TwentySeventeen's button style */
+#buddypress #what-is-new-submit input[type="submit"] {
+	-webkit-appearance: button;
+	background-color: #222;
+	border: 0;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-size: 0.875rem;
+	font-weight: 800;
+    line-height: 1;
+    padding: 1em 2em;
+    text-shadow: none;
+    -webkit-transition: background 0.2s;
+    transition: background 0.2s;
+}
+
+#buddypress #what-is-new-submit input[type="submit"]:hover {
+	background: #767676;
+}
+
+#buddypress #what-is-new-submit input[type="submit"]:disabled {
+	background: #ccc;
+	color: #fff;
+}
