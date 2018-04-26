@@ -77,13 +77,65 @@ function bp_activity_2017_editor_buttons( $buttons = array() ) {
 }
 
 /**
+ * Include paragraphs to allowed tags.
+ *
+ * @param  array  $allowed_tags The Activity allowed tags.
+ * @return array                The Activity allowed tags.
+ */
+function bp_activity_2017_allowed_tags( $allowed_tags = array() ) {
+	$allowed_tags['p'] = true;
+
+	return $allowed_tags;
+}
+add_filter( 'bp_activity_allowed_tags', 'bp_activity_2017_allowed_tags', 10, 1 );
+
+/**
+ * Only allow image attachments to be queried.
+ *
+ * @param  array  $args The Ajax query attachments arguments.
+ * @return array        The Ajax query attachments arguments.
+ */
+function bp_activity_2017_query_attachments_args( $args = array() ) {
+	if ( bp_is_activity_component() ) {
+		$args['post_mime_type'] = 'image';
+	}
+
+	return $args;
+}
+add_filter( 'ajax_query_attachments_args', 'bp_activity_2017_query_attachments_args', 10, 1 );
+
+/**
+ * Restrict queriable types to images.
+ *
+ * @param  array  $mimes The available types for query.
+ * @return array         The available types for query.
+ */
+function bp_activity_2017_mime_types( $types = array() ) {
+	return array_diff_key( $types, array( 'video' => false, 'audio' => false ) );
+}
+
+/**
+ * Restrict Upload mime types to images.
+ *
+ * @param  array  $mimes The available mime types for upload.
+ * @return array         The available mime types for upload.
+ */
+function bp_activity_2017_upload_mimes( $mimes = array() ) {
+	return array_intersect_key( $mimes, array(
+		'jpg|jpeg|jpe' => true,
+		'gif'          => true,
+		'png'          => true,
+	) );
+}
+
+/**
  * The Activity rich editor !
  */
 function bp_activity_2017_editor() {
 	$args = array(
 		'textarea_name' => 'whats-new',
 		'wpautop'       => true,
-		'media_buttons' => false, // I still need to work on this!
+		'media_buttons' => true,
 		'editor_class'  => 'bp-suggestions',
 		'textarea_rows' => 10,
 		'teeny'         => false,
@@ -100,13 +152,17 @@ function bp_activity_2017_editor() {
 	// Enqueue our custom Editor script
 	wp_enqueue_script( 'bp-activity-2017-editor' );
 
-	// Temporarly filter the editor
+	// Temporarly filters to restrict the Activity editor
 	add_filter( 'mce_buttons', 'bp_activity_2017_editor_buttons', 10, 1 );
+	add_filter( 'post_mime_types', 'bp_activity_2017_mime_types', 10, 1 );
+	add_filter( 'upload_mimes', 'bp_activity_2017_upload_mimes', 10, 1 );
 
 	wp_editor( $content, 'what-is-new', $args );
 
-	// Stop filtering the editor
+	// Stop filtering the editor.
 	remove_filter( 'mce_buttons', 'bp_activity_2017_editor_buttons', 10, 1 );
+	remove_filter( 'post_mime_types', 'bp_activity_2017_mime_types', 10, 1 );
+	remove_filter( 'upload_mimes', 'bp_activity_2017_upload_mimes', 10, 1 );
 }
 
 /**

@@ -197,4 +197,9 @@
 		} );
 	} );
 
+	// Listen to Media Button click to disable the WP Media Editor Menu.
+	$( document ).on( 'click.add-media-button', '.insert-media', function() {
+		$( 'body' ).find( '.media-frame' ).addClass( 'hide-menu' );
+	} );
+
 } )( jQuery, window.bp || {} );
