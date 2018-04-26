@@ -1,5 +1,16 @@
 /* Activity rich editor styles */
 
+#buddypress form#whats-new-form.minimized #wp-what-is-new-wrap .mce-top-part,
+#buddypress form#whats-new-form.minimized #wp-what-is-new-wrap .mce-statusbar,
+#buddypress form#whats-new-form.minimized #aw-what-is-new-submit {
+	display: none;
+}
+
+#buddypress form#whats-new-form.minimized #wp-what-is-new-editor-container {
+	max-height: 50px;
+	overflow: hidden;
+}
+
 #buddypress form#whats-new-form #what-is-new-submit {
 	float: right;
 	margin-top: 12px;

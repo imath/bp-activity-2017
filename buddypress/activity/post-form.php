@@ -16,7 +16,7 @@ if ( bp_is_active( 'groups' ) ) {
 }
 ?>
 
-<form action="<?php bp_activity_post_form_action(); ?>" method="post" id="whats-new-form" name="whats-new-form">
+<form action="<?php bp_activity_post_form_action(); ?>" method="post" id="whats-new-form" name="whats-new-form" class="minimized">
 
 	<div id="whats-new-avatar">
 		<a href="<?php echo bp_loggedin_user_domain(); ?>">

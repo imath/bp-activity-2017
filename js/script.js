@@ -13,6 +13,18 @@
 			window.bp.mentions.tinyMCEinit();
 		}
 
+		ActivityEditor.on( 'focus', function( e ) {
+			$( e.target.formElement ).removeClass( 'minimized' );
+		} );
+
+		ActivityEditor.on( 'blur', function( e ) {
+			if ( !! ActivityEditor.getContent() ) {
+				return e;
+			}
+
+			$( e.target.formElement ).addClass( 'minimized' );
+		} );
+
 		$( '#aw-what-is-new-submit' ).on( 'click', function( e ) {
 			e.preventDefault();
 
@@ -114,6 +126,7 @@
 					}
 
 					resetForm( button, form );
+					form.addClass( 'minimized' );
 
 				} ).fail( function( response ) {
 					displayFeedback( form, response.message, 'error' );
@@ -173,6 +186,7 @@
 						$( 'li.new-update').hide().slideDown( 300 );
 						$( 'li.new-update').removeClass( 'new-update' );
 						form.get( 0 ).reset();
+						form.addClass( 'minimized' );
 
 						// reset vars to get newest activities
 						newest_activities = '';
