@@ -83,7 +83,7 @@ function bp_activity_2017_editor() {
 	$args = array(
 		'textarea_name' => 'whats-new',
 		'wpautop'       => true,
-		'media_buttons' => false,
+		'media_buttons' => false, // I still need to work on this!
 		'editor_class'  => 'bp-suggestions',
 		'textarea_rows' => 10,
 		'teeny'         => false,

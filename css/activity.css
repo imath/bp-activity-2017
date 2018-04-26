@@ -5,14 +5,14 @@
 	background: none;
 }
 
-#buddypress form#whats-new-form.minimized #wp-what-is-new-editor-tools,
+#buddypress form#whats-new-form.minimized #wp-what-is-new-media-buttons,
 #buddypress form#whats-new-form.minimized #wp-what-is-new-wrap .mce-top-part,
 #buddypress form#whats-new-form.minimized #wp-what-is-new-wrap .mce-statusbar,
 #buddypress form#whats-new-form.minimized #aw-what-is-new-submit {
 	display: none;
 }
 
-#buddypress form#whats-new-form .wp-core-ui #wp-what-is-new-editor-tools .button {
+#buddypress form#whats-new-form .wp-core-ui #wp-what-is-new-media-buttons .button {
 	padding: 0 0.5em;
 	border-radius: 0;
 	box-shadow: none;
