@@ -10,6 +10,12 @@ defined( 'ABSPATH' ) || exit;
  * Register and enqueue custom styles & fonts.
  */
 function bp_activity_2017_enqueue_styles() {
+	if ( ! function_exists( 'bp_get_theme_compat_id' ) ) {
+		return;
+	}
+
+	$template_pack = bp_get_theme_compat_id();
+
 	// Register the TwentySeventeen stylesheet to use it as a dependency.
 	wp_register_style( 'parent-style', get_template_directory_uri() . '/style.css' );
 
@@ -21,10 +27,17 @@ function bp_activity_2017_enqueue_styles() {
 		''
 	);
 
+	$deps = array();
+	if ( 'legacy' === $template_pack ) {
+		$deps = array( 'bp-legacy-js' );
+	} else {
+		$deps = array( 'bp-nouveau-activity-post-form' );
+	}
+
 	wp_register_script(
 		'bp-activity-2017-editor',
 		get_stylesheet_directory_uri() . '/js/script.js',
-		array( 'bp-legacy-js' ),
+		$deps,
 		'1.0.0',
 		true
 	);

@@ -41,3 +41,48 @@
 	background: #ccc;
 	color: #fff;
 }
+
+/* Nouveau Styles */
+
+#buddypress.buddypress-wrap form#whats-new-form #whats-new-avatar {
+	float: left;
+}
+
+#buddypress.buddypress-wrap form#whats-new-form #whats-new-content {
+	margin-left: 55px;
+	padding: 0 0 20px 20px;
+}
+
+#buddypress.buddypress-wrap form#whats-new-form p.activity-greeting {
+	line-height: 0.5;
+	margin-bottom: 15px;
+	margin-left: 75px;
+}
+
+#buddypress.buddypress-wrap #whats-new-form div#message {
+	margin: 0 0 15px;
+}
+
+#buddypress.buddypress-wrap div#message.published {
+	clear: both;
+	display: block;
+}
+
+#buddypress.buddypress-wrap div#message p {
+	font-size: 90%;
+	display: block;
+	padding: 10px 15px;
+}
+
+#buddypress.buddypress-wrap div#message.error p {
+	background-color: #fdc;
+	border: 1px solid #a00;
+	clear: left;
+	color: #800;
+}
+
+#buddypress.buddypress-wrap div#message.published p {
+	background-color: #efc;
+	border: 1px solid #591;
+	color: #250;
+}

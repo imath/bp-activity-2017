@@ -1,5 +1,5 @@
 /* Activity rich editor script */
-( function( $ ) {
+( function( $, bp ) {
 
 	if ( 'undefined' === typeof bpActivity2017Editor.ajaxurl ) {
 		return;
@@ -16,9 +16,25 @@
 		$( '#aw-what-is-new-submit' ).on( 'click', function( e ) {
 			e.preventDefault();
 
+			var resetForm = function( button, form ) {
+				button.removeClass( 'loading' );
+				button.prop( 'disabled', false );
+				form.removeClass( 'submitted' );
+			};
+
+			var displayFeedback = function( form, message, type ) {
+				$( '#' + form.prop( 'id' ) ).prepend(
+					$( '<div></div>' ).addClass( type )
+									  .html( $( '<p></p>').html( message ) )
+									  .prop( 'id', 'message' )
+				);
+
+				$( '#' + form.prop( 'id' ) + ' div.' + type ).hide().fadeIn( 200 );
+			};
+
 			var content = ActivityEditor.getContent(), button = $( e.currentTarget ),
 				form = button.closest( 'form#whats-new-form' ), last_date_recorded = 0,
-				post_data, firstrow, timestamp;
+				post_data, firstrow, timestamp, bpCookies;
 
 			if ( ! content ) {
 				form.prepend( $( '<div></div>' ).html( $( '<p></p>' ).html( bpActivity2017Editor.nocontent ) )
@@ -28,7 +44,15 @@
 				return false;
 			}
 
-			$( 'div.error' ).remove();
+			// The Nouveau  template pack is not using cookies anymore
+			if ( 'undefined' !== typeof window.bp_get_cookies ) {
+				bpCookies = bp_get_cookies();
+			}
+
+			$.each( form.find( '.error' ), function( i, div ) {
+				div.remove();
+			} );
+
 			button.addClass( 'loading' );
 			button.prop( 'disabled', true );
 			form.addClass( 'submitted' );
@@ -53,72 +77,110 @@
 
 			ActivityEditor.setContent( '' );
 
-			$.post( bpActivity2017Editor.ajaxurl, {
+			var postData = {
 				'action': 'post_update',
-				'cookie': bp_get_cookies(),
 				'_wpnonce_post_update': $( '#_wpnonce_post_update' ).val(),
 				'content': content,
 				'since': last_date_recorded,
 				'_bp_as_nonce': $('#_bp_as_nonce').val() || ''
-			}, function( response ) {
-				button.removeClass( 'loading' );
-				button.prop( 'disabled', false );
-				form.removeClass( 'submitted' );
+			};
 
-				// Failed.
-				if ( response[0] + response[1] === '-1' ) {
-					form.prepend( response.substr( 2, response.length ) );
-					$( '#' + form.prop( 'id' ) + ' div.error' ).hide().fadeIn( 200 );
+			if ( bpCookies ) {
+				postData = $.extend( postData, { 'cookie': bpCookies } );
+			} else if ( 'undefined' !== typeof BP_Nouveau.activity.params ) {
+				postData = $.extend( postData, {
+					'_wpnonce_post_update': BP_Nouveau.activity.params.post_nonce,
+					'object': 'user'
+				} );
+			}
+
+			if ( 'undefined' !== typeof bp.ajax ) {
+				$.each( form.find( '.published' ), function( i, div ) {
+					div.remove();
+				} );
+
+				bp.ajax.post( 'post_update', postData ).done( function( response ) {
+					// Do not add an activity twice.
+					if ( $( '#activity-' + response.id  ).length ) {
+						return;
+					}
+
+					if ( ! response.is_directory || 'all' !== bp.Nouveau.getStorage( 'bp-activity', 'scope' ) ) {
+						displayFeedback( form, response.message, 'published' );
+
+					// Inject the activity into the stream.
+					} else {
+						bp.Nouveau.inject( '#activity-stream ul.activity-list', response.activity, 'prepend' );
+					}
+
+					resetForm( button, form );
+
+				} ).fail( function( response ) {
+					displayFeedback( form, response.message, 'error' );
 
 					// Restore content.
 					ActivityEditor.setContent( content );
+					resetForm( button, form );
+				} );
+			} else {
+				$.post( bpActivity2017Editor.ajaxurl, postData, function( response ) {
+					resetForm( button, form );
 
-				// Success.
-				} else {
-					if ( 0 === $( 'ul.activity-list' ).length ) {
-						$( 'div.error' ).slideUp( 100 ).remove();
-						$( '#message' ).slideUp( 100 ).remove();
-						$( 'div.activity' ).append( '<ul id="activity-stream" class="activity-list item-list">' );
-					}
+					// Failed.
+					if ( response[0] + response[1] === '-1' ) {
+						form.prepend( response.substr( 2, response.length ) );
+						$( '#' + form.prop( 'id' ) + ' div.error' ).hide().fadeIn( 200 );
 
-					if ( firstrow.hasClass( 'load-newest' ) ) {
-						firstrow.remove();
-					}
+						// Restore content.
+						ActivityEditor.setContent( content );
 
-					$( '#activity-stream' ).prepend( response );
-
-					if ( ! last_date_recorded ) {
-						$('#activity-stream li:first').addClass( 'new-update just-posted' );
-					}
-
-					if ( 0 !== $( '#latest-update' ).length ) {
-						var l = $( '#activity-stream li.new-update .activity-content .activity-inner p' ).html(),
-							v = $( '#activity-stream li.new-update .activity-content .activity-header p a.view' ).attr( 'href' ),
-							ltext = $( '#activity-stream li.new-update .activity-content .activity-inner p' ).text(),
-							u = '';
-
-						if ( ltext !== '' ) {
-							u = l + ' ';
+					// Success.
+					} else {
+						if ( 0 === $( 'ul.activity-list' ).length ) {
+							$( 'div.error' ).slideUp( 100 ).remove();
+							$( '#message' ).slideUp( 100 ).remove();
+							$( 'div.activity' ).append( '<ul id="activity-stream" class="activity-list item-list">' );
 						}
 
-						u += '<a href="' + v + '" rel="nofollow">' + bpActivity2017Editor.view + '</a>';
+						if ( firstrow.hasClass( 'load-newest' ) ) {
+							firstrow.remove();
+						}
 
-						$( '#latest-update' ).slideUp( 300, function() {
-							$( '#latest-update' ).html( u );
-							$( '#latest-update' ).slideDown( 300 );
-						} );
+						$( '#activity-stream' ).prepend( response );
+
+						if ( ! last_date_recorded ) {
+							$('#activity-stream li:first').addClass( 'new-update just-posted' );
+						}
+
+						if ( 0 !== $( '#latest-update' ).length ) {
+							var l = $( '#activity-stream li.new-update .activity-content .activity-inner p' ).html(),
+								v = $( '#activity-stream li.new-update .activity-content .activity-header p a.view' ).attr( 'href' ),
+								ltext = $( '#activity-stream li.new-update .activity-content .activity-inner p' ).text(),
+								u = '';
+
+							if ( ltext !== '' ) {
+								u = l + ' ';
+							}
+
+							u += '<a href="' + v + '" rel="nofollow">' + bpActivity2017Editor.view + '</a>';
+
+							$( '#latest-update' ).slideUp( 300, function() {
+								$( '#latest-update' ).html( u );
+								$( '#latest-update' ).slideDown( 300 );
+							} );
+						}
+
+						$( 'li.new-update').hide().slideDown( 300 );
+						$( 'li.new-update').removeClass( 'new-update' );
+						form.get( 0 ).reset();
+
+						// reset vars to get newest activities
+						newest_activities = '';
+						activity_last_recorded  = 0;
 					}
-
-					$( 'li.new-update').hide().slideDown( 300 );
-					$( 'li.new-update').removeClass( 'new-update' );
-					form.get( 0 ).reset();
-
-					// reset vars to get newest activities
-					newest_activities = '';
-					activity_last_recorded  = 0;
-				}
-			} );
+				} );
+			}
 		} );
 	} );
 
-} )( jQuery );
+} )( jQuery, window.bp || {} );
