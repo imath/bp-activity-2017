@@ -1,9 +1,25 @@
 /* Activity rich editor styles */
 
+#buddypress form#whats-new-form div.mce-toolbar-grp {
+	border-bottom: none;
+	background: none;
+}
+
+#buddypress form#whats-new-form.minimized #wp-what-is-new-editor-tools,
 #buddypress form#whats-new-form.minimized #wp-what-is-new-wrap .mce-top-part,
 #buddypress form#whats-new-form.minimized #wp-what-is-new-wrap .mce-statusbar,
 #buddypress form#whats-new-form.minimized #aw-what-is-new-submit {
 	display: none;
+}
+
+#buddypress form#whats-new-form .wp-core-ui #wp-what-is-new-editor-tools .button {
+	padding: 0 0.5em;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+#buddypress form#whats-new-form #wp-what-is-new-media-buttons {
+	float: right;
 }
 
 #buddypress form#whats-new-form.minimized #wp-what-is-new-editor-container {
