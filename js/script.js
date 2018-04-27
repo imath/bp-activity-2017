@@ -122,6 +122,11 @@
 
 					// Inject the activity into the stream.
 					} else {
+						// If the container is not there, add it.
+						if ( ! $( '#activity-stream ul.activity-list').length ) {
+							$( '#activity-stream' ).html(  $( '<ul></ul>' ).addClass( 'activity-list item-list bp-list' ) );
+						}
+
 						bp.Nouveau.inject( '#activity-stream ul.activity-list', response.activity, 'prepend' );
 					}
 
