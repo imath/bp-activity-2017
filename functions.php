@@ -129,6 +129,19 @@ function bp_activity_2017_upload_mimes( $mimes = array() ) {
 }
 
 /**
+ * Customize the Media Editor strings.
+ *
+ * @param  array $strings The Media Editor strings.
+ * @return array          The Media Editor strings.
+ */
+function bp_activity_2017_media_view_strings( $strings = array() ) {
+	return array_merge( $strings, array(
+		'insertIntoPost'     => __( 'Insérer dans l\'activité', 'bp-activity-2017' ),
+		'uploadedToThisPost' => __( 'Attaché(s) aux activités', 'bp-activity-2017' ),
+	) );
+}
+
+/**
  * The Activity rich editor !
  */
 function bp_activity_2017_editor() {
@@ -156,6 +169,7 @@ function bp_activity_2017_editor() {
 	add_filter( 'mce_buttons', 'bp_activity_2017_editor_buttons', 10, 1 );
 	add_filter( 'post_mime_types', 'bp_activity_2017_mime_types', 10, 1 );
 	add_filter( 'upload_mimes', 'bp_activity_2017_upload_mimes', 10, 1 );
+	add_filter( 'media_view_strings', 'bp_activity_2017_media_view_strings', 10, 1 );
 
 	wp_editor( $content, 'what-is-new', $args );
 
@@ -163,6 +177,7 @@ function bp_activity_2017_editor() {
 	remove_filter( 'mce_buttons', 'bp_activity_2017_editor_buttons', 10, 1 );
 	remove_filter( 'post_mime_types', 'bp_activity_2017_mime_types', 10, 1 );
 	remove_filter( 'upload_mimes', 'bp_activity_2017_upload_mimes', 10, 1 );
+	remove_filter( 'media_view_strings', 'bp_activity_2017_media_view_strings', 10, 1 );
 }
 
 /**
