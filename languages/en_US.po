@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BP Activity 2017 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/bp-activity-2017\n"
-"POT-Creation-Date: 2018-04-25 19:14:49+00:00\n"
-"PO-Revision-Date: 2018-04-25 21:17+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2018-04-28 01:48:08+00:00\n"
+"PO-Revision-Date: 2018-04-28 03:49+0100\n"
+"Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.4\n"
+"X-Generator: Poedit 1.7.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: buddypress/activity/post-form.php:11
@@ -36,13 +36,21 @@ msgstr "Post updates"
 msgid "Publier"
 msgstr "Post update"
 
-#: functions.php:34
+#: functions.php:47
 msgid "Afficher"
 msgstr "View"
 
-#: functions.php:35
+#: functions.php:48
 msgid "Merci de bien vouloir publier quelque chose !"
 msgstr "Please enter some content to post."
+
+#: functions.php:139
+msgid "Insérer dans l'activité"
+msgstr "Insert into the activity"
+
+#: functions.php:140
+msgid "Attaché(s) aux activités"
+msgstr "Attached to activities"
 
 #. Theme Name of the plugin/theme
 msgid "BP Activity 2017"
